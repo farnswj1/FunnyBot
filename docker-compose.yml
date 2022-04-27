@@ -1,0 +1,9 @@
+version: "3.2"
+services:
+  app:
+    container_name: app
+    image: app
+    build: app
+    restart: always
+    env_file:
+      - ./app/.env
