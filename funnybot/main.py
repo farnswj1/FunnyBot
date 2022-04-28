@@ -9,8 +9,9 @@ logging.basicConfig(level=logging.INFO)
 
 
 class FunnyBot(Client):
-    austin_powers_quotes = json.load(open('data/austin_powers_quotes.json'))
     jokes = json.load(open('data/jokes.json'))
+    austin_powers_quotes = json.load(open('data/austin_powers_quotes.json'))
+    star_wars_quotes = json.load(open('data/star_wars_quotes.json'))
 
     async def on_ready(self):
         logger.info(f'{self.user} is online!')
@@ -18,14 +19,26 @@ class FunnyBot(Client):
     async def on_message(self, message):
         if self.user == message.author:
             return
+
+        response = None
+
+        if message.content == '/help':
+            response = '\n'.join((
+                'Here are the commands you can use to interact with me:',
+                '**/joke** --- receive a random joke.',
+                '**/austinpowers** --- receive a random Austin Powers quote.',
+                '**/starwars** --- receive a random quote from Star Wars.'
+            ))
         elif message.content == '/joke':
-            logger.info(f'{message.author}: {message.content}')
-            joke = ''.join(random.choice(self.jokes).split('\n'))
-            await message.channel.send(joke)
+            response = random.choice(self.jokes)
         elif message.content == '/austinpowers':
+            response = random.choice(self.austin_powers_quotes)
+        elif message.content == '/starwars':
+            response = random.choice(self.star_wars_quotes)
+
+        if response:
             logger.info(f'{message.author}: {message.content}')
-            quote = random.choice(self.austin_powers_quotes)
-            await message.channel.send(quote)
+            await message.channel.send(response)
 
 
 if __name__ == '__main__':
