@@ -1,9 +1,9 @@
 version: "3.2"
 services:
-  app:
-    container_name: app
-    image: app
-    build: app
+  funnybot:
+    container_name: funnybot
+    image: funnybot
+    build: funnybot
     restart: always
     env_file:
-      - ./app/.env
+      - ./funnybot/.env

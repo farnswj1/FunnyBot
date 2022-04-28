@@ -8,7 +8,7 @@ Also, you must have a Discord bot set up in order to use this program.
 
 
 ## Setup
-First, create a ```.env``` file inside the ```app``` directory.
+First, create a ```.env``` file inside the ```funnybot``` directory.
 Then, add the token from your Discord bot to ```DISCORD_TOKEN```, as shown below:
 ```
 DISCORD_TOKEN=[token goes here]
