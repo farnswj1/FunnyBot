@@ -1,5 +1,15 @@
 version: "3.2"
 services:
+  postgres:
+    container_name: postgres
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: funnybot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:rw
   funnybot:
     container_name: funnybot
     image: funnybot
@@ -7,3 +17,5 @@ services:
     restart: always
     env_file:
       - ./funnybot/.env
+volumes:
+  postgres_data:

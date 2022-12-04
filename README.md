@@ -9,18 +9,29 @@ Also, you must have a Discord bot set up in order to use this program.
 
 ## Setup
 First, create a ```.env``` file inside the ```funnybot``` directory.
-Then, add the token from your Discord bot to ```DISCORD_TOKEN```, as shown below:
+Then, add the token from your Discord bot to ```DISCORD_TOKEN``` and
+the ```DATABASE_URL``` configurations, as shown below:
 ```
 DISCORD_TOKEN=[token goes here]
+DATABASE_URL=postgresql://postgres:password@postgres:5432/funnybot
 ```
 
 Then, run ```docker-compose up -d --build``` to build the image and run the container.
 
+NOTE: This application uses PostgreSQL.
+
+
+### Database Setup
+Alembic handles the database migrations. To set up the database schema, run
+```docker exec -it funnybot alembic upgrade head```. Then, run ```docker exec -it funnybot python populate_db.py``` to populate the database.
+
 
 ## How to Use
-Once the container is running, send a message to the Discord bot. Commands are provided
+Once the container is running and the database is set up, send a message to the Discord bot. Commands are provided
 to get a particular type of joke.
 
 For a random joke, enter ```/joke```.
 
 For an Austin Powers quote, enter ```/austinpowers```.
+
+For more, enter ```/help```.

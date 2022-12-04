@@ -1,0 +1,5 @@
+Here are the commands you can use to interact with me:
+    **/joke** --- receive a random joke.
+    **/insult** --- receive a random insult.
+    **/austinpowers** --- receive a random Austin Powers quote.
+    **/starwars** --- receive a random quote from Star Wars.

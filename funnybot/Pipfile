@@ -5,9 +5,13 @@ name = "pypi"
 
 [packages]
 "discord.py" = "==2.1.0"
+databases = {version = "==0.6.2", extras = ["asyncpg"]}
+sqlalchemy = "==1.4.41"
+psycopg2 = "==2.9.5"
+alembic = "==1.8.1"
 supervisor = "==4.2.4"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"
