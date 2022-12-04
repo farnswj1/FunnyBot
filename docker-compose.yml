@@ -4,10 +4,8 @@ services:
     container_name: postgres
     image: postgres:14
     restart: always
-    environment:
-      POSTGRES_DB: funnybot
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+    env_file:
+      - ./postgres/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data:rw
   funnybot:
@@ -17,5 +15,7 @@ services:
     restart: always
     env_file:
       - ./funnybot/.env
+    depends_on:
+      - postgres
 volumes:
   postgres_data:

@@ -8,6 +8,7 @@ Also, you must have a Discord bot set up in order to use this program.
 
 
 ## Setup
+### Funny Bot
 First, create a ```.env``` file inside the ```funnybot``` directory.
 Then, add the token from your Discord bot to ```DISCORD_TOKEN``` and
 the ```DATABASE_URL``` configurations, as shown below:
@@ -16,13 +17,22 @@ DISCORD_TOKEN=[token goes here]
 DATABASE_URL=postgresql://postgres:password@postgres:5432/funnybot
 ```
 
+### PostgreSQL
+Create a ```.env``` file inside the ```postgres``` directory with the
+following configurations:
+```
+POSTGRES_DB=funnybot
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password
+```
+
 Then, run ```docker-compose up -d --build``` to build the image and run the container.
 
 NOTE: This application uses PostgreSQL.
 
 
 ### Database Setup
-Alembic handles the database migrations. To set up the database schema, run
+Alembic handles the database migrations. Run the migrations with
 ```docker exec -it funnybot alembic upgrade head```. Then, run ```docker exec -it funnybot python populate_db.py``` to populate the database.
 
 
