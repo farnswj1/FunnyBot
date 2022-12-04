@@ -26,12 +26,10 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=password
 ```
 
-Then, run ```docker-compose up -d --build``` to build the image and run the container.
-
-NOTE: This application uses PostgreSQL.
+Then, run ```docker-compose up -d --build``` to build the image(s) and run the container(s).
 
 
-### Database Setup
+### Loading the Data
 Alembic handles the database migrations. Run the migrations with
 ```docker exec -it funnybot alembic upgrade head```. Then, run ```docker exec -it funnybot python populate_db.py``` to populate the database.
 
