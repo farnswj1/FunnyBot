@@ -68,6 +68,7 @@ async def main():
         )
     ]
     await asyncio.gather(*tasks)
+    await database.disconnect()
 
 
 if __name__ == '__main__':
