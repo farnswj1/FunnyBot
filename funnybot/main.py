@@ -22,6 +22,10 @@ class FunnyBot(Client):
         with open('data/help.txt') as file:
             self.help_text = file.read()
 
+    async def close(self):
+        await super().close()
+        await database.disconnect()
+
     async def on_ready(self):
         logger.info(f'{self.user} is online!')
 
