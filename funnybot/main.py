@@ -1,13 +1,8 @@
 from discord import Client, Intents
 from db import database
-from db.models import (
-    austin_powers_quotes,
-    insults,
-    jokes,
-    star_wars_quotes
-)
-from db.operations import get_select_random_record_query
+from db.models import Joke
 from settings import DISCORD_TOKEN
+import random
 import logging
 
 
@@ -16,6 +11,13 @@ logging.basicConfig(level=logging.INFO)
 
 
 class FunnyBot(Client):
+    type_map = {
+        '/austinpowers': 'Austin Powers',
+        '/insult': 'Insult',
+        '/joke': 'Joke',
+        '/starwars': 'Star Wars'
+    }
+
     async def setup_hook(self):
         await database.connect()
 
@@ -37,23 +39,13 @@ class FunnyBot(Client):
 
         match content := message.content:
             case '/help':
-                query = None
                 response = self.help_text
-            case '/austinpowers':
-                query = get_select_random_record_query(austin_powers_quotes)
-            case '/insult':
-                query = get_select_random_record_query(insults)
-            case '/joke':
-                query = get_select_random_record_query(jokes)
-            case '/starwars':
-                query = get_select_random_record_query(star_wars_quotes) 
+            case '/austinpowers' | '/insult' | '/joke' | '/starwars':
+                type = self.type_map.get(content)
+                joke = random.choice(await Joke.objects.filter(type=type).all())
+                response = joke.text
             case _:
-                query = None
                 response = None
-
-        if query is not None:
-            result = await database.fetch_one(query)
-            response = result.text
 
         if response:
             logger.info(f'{author}: {content}')

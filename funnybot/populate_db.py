@@ -1,11 +1,6 @@
 import asyncio
 from db import database
-from db.models import (
-    austin_powers_quotes,
-    insults,
-    jokes,
-    star_wars_quotes
-)
+from db.models import models, Joke
 import json
 
 
@@ -19,9 +14,7 @@ async def populate_austin_powers_quotes_table():
         data = json.load(file)
 
     for text in data:
-        query = austin_powers_quotes.insert().values({'text': text})
-        await database.execute(query)
-
+        await Joke.objects.get_or_create(text=text, type='Austin Powers', defaults={})
 
 async def populate_insults_table():
     filename = FILES_DIR + 'insults.json'
@@ -30,8 +23,7 @@ async def populate_insults_table():
         data = json.load(file)
 
     for text in data:
-        query = insults.insert().values({'text': text})
-        await database.execute(query)
+        await Joke.objects.get_or_create(text=text, type='Insult', defaults={})
 
 
 async def populate_jokes_table():
@@ -41,8 +33,7 @@ async def populate_jokes_table():
         data = json.load(file)
 
     for text in data:
-        query = jokes.insert().values({'text': text})
-        await database.execute(query)
+        await Joke.objects.get_or_create(text=text, type='Joke', defaults={})
 
 
 async def populate_star_wars_quotes_table():
@@ -52,11 +43,11 @@ async def populate_star_wars_quotes_table():
         data = json.load(file)
 
     for text in data:
-        query = star_wars_quotes.insert().values({'text': text})
-        await database.execute(query)
+        await Joke.objects.get_or_create(text=text, type='Star Wars', defaults={})
 
 
 async def main():
+    await models.create_all()
     await database.connect()
     tasks = [
         asyncio.create_task(func())
