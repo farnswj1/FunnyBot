@@ -30,8 +30,7 @@ Then, run ```docker-compose up -d --build``` to build the image(s) and run the c
 
 
 ### Loading the Data
-Alembic handles the database migrations. Run the migrations with
-```docker exec -it funnybot alembic upgrade head```. Then, run ```docker exec -it funnybot python populate_db.py``` to populate the database.
+To populate the database, ```docker exec -it funnybot python populate_db.py```.
 
 
 ## How to Use
