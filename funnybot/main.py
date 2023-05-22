@@ -41,8 +41,8 @@ class FunnyBot(Client):
             case '/help':
                 response = self.help_text
             case '/austinpowers' | '/insult' | '/joke' | '/starwars':
-                type = self.type_map.get(content)
-                joke = random.choice(await Joke.objects.filter(type=type).all())
+                _type = self.type_map.get(content)
+                joke = random.choice(await Joke.objects.filter(type=_type).all())
                 response = joke.text
             case _:
                 response = None
