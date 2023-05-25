@@ -1,8 +1,8 @@
 from discord import Client, Intents
+from sqlalchemy.sql.expression import func
 from db import database
 from db.models import Joke
 from settings import DISCORD_TOKEN
-import random
 import logging
 
 
@@ -42,7 +42,7 @@ class FunnyBot(Client):
                 response = self.help_text
             case '/austinpowers' | '/insult' | '/joke' | '/starwars':
                 _type = self.type_map.get(content)
-                joke = random.choice(await Joke.objects.filter(type=_type).all())
+                joke = await Joke.objects.filter(type=_type).order_by(func.random()).first()
                 response = joke.text
             case _:
                 response = None

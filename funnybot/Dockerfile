@@ -1,6 +1,5 @@
 # base image
 FROM python:3.11-slim-bullseye
-RUN apt-get update && apt-get -y install libpq-dev gcc
 
 # set environment variables
 ENV PYTHONUNBUFFERED 1
