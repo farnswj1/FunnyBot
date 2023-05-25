@@ -9,7 +9,7 @@ import uuid
 original_prepare_order_by = QuerySet._prepare_order_by
 
 
-def _prepare_order_by(self, order_by):
+def _prepare_order_by(self, order_by: Function | str):
     return order_by if isinstance(order_by, Function) else original_prepare_order_by(order_by)
 
 
