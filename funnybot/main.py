@@ -37,15 +37,16 @@ class FunnyBot(Client):
         if self.user == author:
             return
 
-        match content := message.content:
-            case '/help':
-                response = self.help_text
-            case '/austinpowers' | '/insult' | '/joke' | '/starwars':
-                _type = self.type_map.get(content)
-                joke = await Joke.objects.filter(type=_type).order_by(func.random()).first()
-                response = joke.text
-            case _:
-                response = None
+        content = message.content
+
+        if content in self.type_map:
+            _type = self.type_map.get(content)
+            joke = await Joke.objects.filter(type=_type).order_by(func.random()).first()
+            response = joke.text
+        elif content == '/help':
+            response = self.help_text
+        else:
+            response = None
 
         if response:
             logger.info(f'{author}: {content}')
