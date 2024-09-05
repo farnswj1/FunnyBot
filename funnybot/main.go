@@ -18,6 +18,7 @@ func main() {
 		utils.Logger.Panic(err.Error())
 	}
 
+	bot.Identify.Intents = discordgo.IntentDirectMessages
 	bot.AddHandler(handlers.OnReady)
 	bot.AddHandler(handlers.OnMessage)
 
