@@ -26,9 +26,9 @@ func main() {
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
-	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
-	<-sc
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+	<-stop
 
 	utils.Logger.Println("Shutting down...")
 	bot.Close()
