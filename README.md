@@ -1,11 +1,9 @@
 # Funny Bot
 This is a Discord bot that tries to make you laugh.
 
-
 ## Requirements
 This project uses Docker and Docker Compose. Please install them before continuing.
 Also, you must have a Discord bot set up in order to use this program.
-
 
 ## Setup
 ### Funny Bot
@@ -28,10 +26,8 @@ POSTGRES_PASSWORD=password
 
 Then, run ```docker-compose up -d --build``` to build the image(s) and run the container(s).
 
-
 ### Loading the Data
 To populate the database, ```docker exec -it funnybot python populate_db.py```.
-
 
 ## How to Use
 Once the container is running and the database is set up, send a message to the Discord bot. Commands are provided

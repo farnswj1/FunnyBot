@@ -1,17 +1,18 @@
-# base image
-FROM python:3.11-slim-bullseye
+FROM golang:1.23.0-alpine AS build
 
-# set environment variables
-ENV PYTHONUNBUFFERED 1
+WORKDIR /opt/app
 
-# set directory
-WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
 
-# add application and install dependencies
-RUN pip install pipenv
-COPY Pipfile Pipfile.lock ./
-RUN pipenv install --system --deploy --ignore-pipfile
 COPY . ./
+RUN go build -o build
 
-# run the program
-CMD ["supervisord", "-c", "supervisord.conf"]
+FROM alpine
+
+WORKDIR /opt/app
+
+COPY --from=build /opt/app/build ./
+COPY --from=build /opt/app/data ./data/
+
+ENTRYPOINT ["./build"]

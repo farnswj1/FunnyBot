@@ -1,5 +1,5 @@
 .gitignore
 .dockerignore
-.env
+.env*
 Dockerfile
-__pycache__
+build
