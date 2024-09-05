@@ -30,5 +30,6 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
+	utils.Logger.Println("Shutting down...")
 	bot.Close()
 }
