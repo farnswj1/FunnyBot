@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+"discord.py" = "==2.2.3"
+orm = {version = "==0.3.1", extras = ["postgresql"]}
+supervisor = "==4.2.5"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
