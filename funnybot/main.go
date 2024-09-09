@@ -10,17 +10,22 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func main() {
-	token := utils.Env["DISCORD_TOKEN"]
-	bot, err := discordgo.New("Bot " + token)
+func getClient(token string) *discordgo.Session {
+	client, err := discordgo.New("Bot " + token)
 
 	if err != nil {
 		utils.Logger.Panic(err.Error())
 	}
 
-	bot.Identify.Intents = discordgo.IntentDirectMessages
-	bot.AddHandler(handlers.OnReady)
-	bot.AddHandler(handlers.OnMessage)
+	client.Identify.Intents = discordgo.IntentDirectMessages
+	client.AddHandler(handlers.OnReady)
+	client.AddHandler(handlers.OnMessage)
+	return client
+}
+
+func main() {
+	token := utils.Env["DISCORD_TOKEN"]
+	bot := getClient(token)
 
 	if err := bot.Open(); err != nil {
 		utils.Logger.Panic(err.Error())
