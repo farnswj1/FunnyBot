@@ -14,7 +14,7 @@ COPY . ./
 RUN cargo build --release
 
 # the final base image
-FROM ubuntu
+FROM gcr.io/distroless/cc
 
 WORKDIR /opt/app
 
