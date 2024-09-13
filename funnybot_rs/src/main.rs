@@ -30,11 +30,10 @@ impl EventHandler for Handler {
             return;
         }
 
-        let content = msg.content;
-        info!("{:}: {:}", msg.author.name, content);
+        info!("{:}: {:}", msg.author.name, msg.content);
 
         let response = {
-            if let Some(category) = self.map.get(&content) {
+            if let Some(category) = self.map.get(&msg.content) {
                 let joke =
                     query_as::<_, Joke>("SELECT text FROM jokes WHERE type = $1 ORDER BY RANDOM() LIMIT 1")
                     .bind(category)
