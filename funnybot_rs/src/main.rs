@@ -55,8 +55,7 @@ impl EventHandler for Handler {
     }
 
     async fn ready(&self, _: Context, ready: Ready) {
-        let user = ready.user;
-        info!("{} #{:?} is online!", user.name, user.discriminator.unwrap());
+        info!("{} #{:?} is online!", ready.user.name, ready.user.discriminator.unwrap());
     }
 }
 
