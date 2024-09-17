@@ -42,7 +42,7 @@ impl EventHandler for Handler {
             return;
         }
 
-        info!("{:}: {:}", msg.author.name, msg.content);
+        info!("{}: {}", msg.author.name, msg.content);
         let response = self.help_text.clone();
         let dm = msg.channel_id.say(&context.http, response).await;
 
