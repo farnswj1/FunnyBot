@@ -10,10 +10,10 @@ services:
   funnybot:
     container_name: funnybot
     image: funnybot
-    build: funnybot
+    build: funnybot_rs
     restart: always
     env_file:
-      - ./funnybot/.env
+      - ./funnybot_rs/.env
     depends_on:
       - postgres
 volumes:
