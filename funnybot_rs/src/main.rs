@@ -43,8 +43,7 @@ impl EventHandler for Handler {
         }
 
         info!("{}: {}", msg.author.name, msg.content);
-        let response = self.help_text.clone();
-        let dm = msg.channel_id.say(&context.http, response).await;
+        let dm = msg.channel_id.say(&context.http, &self.help_text).await;
 
         if let Err(error) = dm {
             error!("Error when direct messaging user: {error:?}");
@@ -71,8 +70,8 @@ impl EventHandler for Handler {
                 .unwrap();
 
             let data = CreateInteractionResponseMessage::new().content(joke.text);
-            let builder = CreateInteractionResponse::Message(data);
-            let dm = command.create_response(&context.http, builder).await;
+            let message = CreateInteractionResponse::Message(data);
+            let dm = command.create_response(&context.http, message).await;
 
             if let Err(error) = dm {
                 error!("Cannot respond to slash command: {error}");
