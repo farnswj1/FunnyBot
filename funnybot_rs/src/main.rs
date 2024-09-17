@@ -1,7 +1,13 @@
-use std::collections::HashMap;
 use std::{env, fs};
 
 use dotenv::dotenv;
+use serenity::all::{
+    Command,
+    CreateCommand,
+    CreateInteractionResponse,
+    CreateInteractionResponseMessage,
+    Interaction
+};
 use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
@@ -11,9 +17,15 @@ use sqlx::prelude::FromRow;
 use sqlx::{query_as, PgPool};
 use tracing::{error, info};
 
+const COMMANDS: &'static [[&'static str; 2]] = &[
+    ["joke", "Receive a random joke."],
+    ["insult", "Receive a random insult."],
+    ["austinpowers", "Receive a random Austin Powers quote."],
+    ["starwars", "Receive a random quote from Star Wars."]
+];
+
 struct Handler {
     database: PgPool,
-    map: HashMap<String, String>,
     help_text: String,
 }
 
@@ -31,22 +43,7 @@ impl EventHandler for Handler {
         }
 
         info!("{:}: {:}", msg.author.name, msg.content);
-
-        let response = {
-            if let Some(category) = self.map.get(&msg.content) {
-                let joke =
-                    query_as::<_, Joke>("SELECT text FROM jokes WHERE type = $1 ORDER BY RANDOM() LIMIT 1")
-                    .bind(category)
-                    .fetch_one(&self.database)
-                    .await
-                    .unwrap();
-
-                joke.text
-            } else {
-                self.help_text.to_string()
-            }
-        };
-
+        let response = self.help_text.clone();
         let dm = msg.channel_id.say(&context.http, response).await;
 
         if let Err(error) = dm {
@@ -54,7 +51,46 @@ impl EventHandler for Handler {
         }
     }
 
-    async fn ready(&self, _: Context, ready: Ready) {
+    async fn interaction_create(&self, context: Context, interaction: Interaction) {
+        if let Interaction::Command(command) = interaction {
+            info!("{}: {}", command.user.name, command.data.name);
+
+            let category = match command.data.name.as_str() {
+                "joke" => "Joke",
+                "insult" => "Insult",
+                "austinpowers" => "Austin Powers",
+                "starwars" => "Star Wars",
+                _ => "Joke"
+            };
+
+            let joke =
+                query_as::<_, Joke>("SELECT text FROM jokes WHERE type = $1 ORDER BY RANDOM() LIMIT 1")
+                .bind(category)
+                .fetch_one(&self.database)
+                .await
+                .unwrap();
+
+            let data = CreateInteractionResponseMessage::new().content(joke.text);
+            let builder = CreateInteractionResponse::Message(data);
+            let dm = command.create_response(&context.http, builder).await;
+
+            if let Err(error) = dm {
+                error!("Cannot respond to slash command: {error}");
+            }
+        }
+    }
+
+    async fn ready(&self, context: Context, ready: Ready) {
+        for command in COMMANDS.iter() {
+            let [name, description] = *command;
+            let cmd = CreateCommand::new(name).description(description);
+            let response = Command::create_global_command(&context.http, cmd).await;
+
+            if let Err(error) = response {
+                error!("Unable to register command: {error}");
+            }
+        }
+
         info!("{} #{:?} is online!", ready.user.name, ready.user.discriminator.unwrap());
     }
 }
@@ -74,14 +110,8 @@ async fn main() {
         .expect("Connected to database");
 
     let intents = GatewayIntents::DIRECT_MESSAGES;
-    let map = HashMap::from([
-        ("/austinpowers".to_string(), "Austin Powers".to_string()),
-        ("/insult".to_string(), "Insult".to_string()),
-        ("/joke".to_string(), "Joke".to_string()),
-        ("/starwars".to_string(), "Star Wars".to_string()),
-    ]);
     let help_text = fs::read_to_string("./data/help.txt").expect("Read the file");
-    let handler = Handler { database, map, help_text };
+    let handler = Handler { database, help_text };
 
     let mut client = Client::builder(&token, intents)
         .event_handler(handler)
