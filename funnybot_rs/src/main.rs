@@ -1,6 +1,6 @@
 use std::{env, fs};
 
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use serenity::all::{
     Command,
     CreateCommand,

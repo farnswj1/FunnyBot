@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dotenv = "0.15.0"
+dotenvy = "0.15.7"
 serenity = "0.12.2"
 sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio", "uuid"] }
 tokio = { version = "1.40.0", features = ["full"] }
