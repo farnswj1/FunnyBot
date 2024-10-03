@@ -80,10 +80,9 @@ impl EventHandler for Handler {
     }
 
     async fn ready(&self, context: Context, ready: Ready) {
-        for command in COMMANDS.iter() {
-            let [name, description] = *command;
-            let cmd = CreateCommand::new(name).description(description);
-            let response = Command::create_global_command(&context.http, cmd).await;
+        for &[name, description] in COMMANDS.iter() {
+            let command = CreateCommand::new(name).description(description);
+            let response = Command::create_global_command(&context.http, command).await;
 
             if let Err(error) = response {
                 error!("Unable to register command: {error}");
