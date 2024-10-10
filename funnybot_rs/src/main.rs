@@ -55,7 +55,6 @@ impl EventHandler for Handler {
             info!("{}: {}", command.user.name, command.data.name);
 
             let category = match command.data.name.as_str() {
-                "joke" => "Joke",
                 "insult" => "Insult",
                 "austinpowers" => "Austin Powers",
                 "starwars" => "Star Wars",
