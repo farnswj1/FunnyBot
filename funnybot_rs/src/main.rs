@@ -46,7 +46,7 @@ impl EventHandler for Handler {
         let dm = msg.channel_id.say(&context.http, &self.help_text).await;
 
         if let Err(error) = dm {
-            error!("Error when direct messaging user: {error:?}");
+            error!("Error when direct messaging user: {error}");
         }
     }
 
@@ -88,7 +88,7 @@ impl EventHandler for Handler {
             }
         }
 
-        info!("{} #{:?} is online!", ready.user.name, ready.user.discriminator.unwrap());
+        info!("{} #{} is online!", ready.user.name, ready.user.discriminator.unwrap());
     }
 }
 
@@ -116,6 +116,6 @@ async fn main() {
         .expect("Err creating client");
 
     if let Err(error) = client.start().await {
-        error!("Client error: {error:?}");
+        error!("Client error: {error}");
     }
 }
