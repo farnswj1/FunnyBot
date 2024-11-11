@@ -88,7 +88,7 @@ impl EventHandler for Handler {
             }
         }
 
-        info!("{} #{} is online!", ready.user.name, ready.user.discriminator.unwrap());
+        info!("{} is online!", ready.user.tag());
     }
 }
 
