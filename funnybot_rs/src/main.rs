@@ -24,14 +24,14 @@ const COMMANDS: &'static [[&'static str; 2]] = &[
     ["starwars", "Receive a random quote from Star Wars."]
 ];
 
-struct Handler {
-    database: PgPool,
-    help_text: String,
-}
-
 #[derive(FromRow)]
 struct Joke {
     text: String
+}
+
+struct Handler {
+    database: PgPool,
+    help_text: String
 }
 
 #[async_trait]
