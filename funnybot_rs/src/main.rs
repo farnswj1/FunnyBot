@@ -42,7 +42,7 @@ impl EventHandler for Handler {
             return;
         }
 
-        info!("{}: {}", msg.author.tag(), msg.content);
+        info!("{}: [help] \"{}\"", msg.author.tag(), msg.content);
         let dm = msg.channel_id.say(&context.http, &self.help_text).await;
 
         if let Err(error) = dm {
@@ -52,8 +52,6 @@ impl EventHandler for Handler {
 
     async fn interaction_create(&self, context: Context, interaction: Interaction) {
         if let Interaction::Command(command) = interaction {
-            info!("{}: {}", command.user.tag(), command.data.name);
-
             let category = match command.data.name.as_str() {
                 "insult" => "Insult",
                 "austinpowers" => "Austin Powers",
@@ -68,6 +66,7 @@ impl EventHandler for Handler {
                 .await
                 .unwrap();
 
+            info!("{}: [{}] \"{}\"", command.user.tag(), command.data.name, joke.text);
             let data = CreateInteractionResponseMessage::new().content(joke.text);
             let message = CreateInteractionResponse::Message(data);
             let dm = command.create_response(&context.http, message).await;
