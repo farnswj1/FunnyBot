@@ -13,8 +13,7 @@ use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
 use serenity::prelude::{Client, Context, EventHandler, GatewayIntents};
 use sqlx::postgres::PgPoolOptions;
-use sqlx::prelude::FromRow;
-use sqlx::{query_as, PgPool};
+use sqlx::{query_scalar, PgPool};
 use tracing::{error, info};
 
 const COMMANDS: &'static [[&'static str; 2]] = &[
@@ -23,11 +22,6 @@ const COMMANDS: &'static [[&'static str; 2]] = &[
     ["austinpowers", "Receive a random Austin Powers quote."],
     ["starwars", "Receive a random quote from Star Wars."]
 ];
-
-#[derive(FromRow)]
-struct Joke {
-    text: String
-}
 
 struct Handler {
     database: PgPool,
@@ -60,14 +54,14 @@ impl EventHandler for Handler {
             };
 
             let joke =
-                query_as::<_, Joke>("SELECT text FROM jokes WHERE type = $1 ORDER BY RANDOM() LIMIT 1")
+                query_scalar::<_, String>("SELECT text FROM jokes WHERE type = $1 ORDER BY RANDOM() LIMIT 1")
                 .bind(category)
                 .fetch_one(&self.database)
                 .await
                 .unwrap();
 
-            info!("{}: [{}] \"{}\"", command.user.tag(), command.data.name, joke.text);
-            let data = CreateInteractionResponseMessage::new().content(joke.text);
+            info!("{}: [{}] \"{}\"", command.user.tag(), command.data.name, joke);
+            let data = CreateInteractionResponseMessage::new().content(joke);
             let message = CreateInteractionResponse::Message(data);
             let dm = command.create_response(&context.http, message).await;
 
